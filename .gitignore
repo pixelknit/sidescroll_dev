@@ -1,6 +1,8 @@
 # Prerequisites
 *.d
 
+game
+
 build/
 
 # Compiled Object files

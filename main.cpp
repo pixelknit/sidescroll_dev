@@ -349,9 +349,11 @@ struct Game {
         environmentSheet =  LoadTexture("environment_sprite.png");
         
         bgLayers = {
-            {LoadTexture("bg.png"), 0.1f, 0},
-            {LoadTexture("bg.png"), 0.3f, 0},
-            {LoadTexture("bg.png"), 0.6f, 0}
+            {LoadTexture("bg_05.png"), 0.1f, 0},
+            {LoadTexture("bg_04.png"), 0.3f, 0},
+            {LoadTexture("bg_03.png"), 0.6f, 0},
+            {LoadTexture("bg_02.png"), 0.7f, 0},
+            {LoadTexture("bg_01.png"), 0.8f, 0},
         };
 
         // Setup camera

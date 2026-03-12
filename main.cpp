@@ -317,6 +317,12 @@ struct Enemy {
     }
 };
 
+struct ParallaxLayer {
+    Texture2D texture;
+    float speed;  // 0.0 = static, 0.5 = half speed, 1.0 = full speed
+    float offsetX;
+};
+
 struct Game {
     Texture2D characterSheet;
     Texture2D environmentSheet;
@@ -331,15 +337,23 @@ struct Game {
     int score;
     int keys;
     GameState state;
+
+    std::vector<ParallaxLayer> bgLayers;
     
     Game() : player(characterSheet), score(0), keys(0), state(PLAYING) {
         InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Side Scroller - Raylib");
         SetTargetFPS(60);
         
         // Load textures (adjust paths to your PNG files)
-        characterSheet = LoadTexture("character_sprite.png");
-        environmentSheet = LoadTexture("environment_sprite.png");
+        characterSheet =    LoadTexture("character_sprite.png");
+        environmentSheet =  LoadTexture("environment_sprite.png");
         
+        bgLayers = {
+            {LoadTexture("bg.png"), 0.1f, 0},
+            {LoadTexture("bg.png"), 0.3f, 0},
+            {LoadTexture("bg.png"), 0.6f, 0}
+        };
+
         // Setup camera
         camera.target = {0, 0};
         camera.offset = {SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f};
@@ -350,6 +364,7 @@ struct Game {
         CreateLevel();
     }
     
+
     void CreateLevel() {
         // Ground platforms
         platforms.push_back({0, 600, 800, 120});
@@ -388,6 +403,9 @@ struct Game {
         
         // Update player
         player.Update(deltaTime, platforms);
+
+        //Update BG
+        // UpdateParallax(player.position.x);
         
         // Update camera to follow player
         camera.target = {
@@ -426,16 +444,25 @@ struct Game {
         
         // Pause
         if (IsKeyPressed(KEY_P)) state = PAUSED;
+
+        for (auto& layer : bgLayers) {
+            layer.offsetX = -player.position.x * layer.speed;
+        }
     }
     
     void Draw() {
         BeginDrawing();
         ClearBackground(SKYBLUE);
+
+        // Draw background (parallax could be added here)
+        for (auto& layer : bgLayers) {
+            float x = fmod(layer.offsetX, layer.texture.width);
+            DrawTexture(layer.texture, x, 0, WHITE);
+            DrawTexture(layer.texture, x + layer.texture.width, 0, WHITE);
+        }
         
         BeginMode2D(camera);
-        
-        // Draw background (parallax could be added here)
-        DrawRectangle(0, 0, 5000, SCREEN_HEIGHT, Color{135, 206, 235, 255});
+        // DrawRectangle(0, 0, 5000, SCREEN_HEIGHT, Color{135, 206, 235, 255});
         
         // Draw platforms from environment sprite
         for (const auto& plat : platforms) {
@@ -494,6 +521,7 @@ struct Game {
     ~Game() {
         UnloadTexture(characterSheet);
         UnloadTexture(environmentSheet);
+        for (auto& layer : bgLayers) UnloadTexture(layer.texture);
         CloseWindow();
     }
     

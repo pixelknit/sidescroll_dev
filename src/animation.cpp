@@ -1,7 +1,7 @@
 #include "animation.hpp"
 
 Animation::Animation(Rectangle firstFrame, int count)
-    : frame(firstFrame), frameCount(count), currentFrame(0), timer(0) {}
+  : frame(firstFrame), frameCount(count), currentFrame(0), timer(0) {}
 
 void Animation::Update(float deltaTime) {
   timer += deltaTime * ANIMATION_SPEED;

@@ -1,4 +1,5 @@
 #include "animation.hpp"
+#include "config.h"
 
 Animation::Animation(Rectangle firstFrame, int count)
   : frame(firstFrame), frameCount(count), currentFrame(0), timer(0) {}

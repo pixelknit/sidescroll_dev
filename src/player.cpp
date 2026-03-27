@@ -1,16 +1,14 @@
 #include "player.hpp"
 #include "config.h"
 
-const int size_chr = 170;
-const int size_follow = size_chr * 2;
 
 Player::Player(Texture2D &spriteSheet)
     : position({100, 300}), velocity({0, 0}), width(80), height(80),
       facingRight(true), isGrounded(false), canAttack(true), attackTimer(0),
-      state(IDLE), idleAnim({{0, 0, size_chr, size_chr}, 4}), // Adjust based on your sprite
-      runAnim({{0, size_chr, size_chr, size_chr}, 6}),              // Next row
-      jumpAnim({{0, size_follow, size_chr, size_chr}, 11}),             // Jump frames
-      attackAnim({{0, size_follow + size_chr, size_chr, size_chr}, 4})           // Attack frames (wider)
+      state(IDLE), idleAnim({{0, 0, PLAYER_SIZE, PLAYER_SIZE}, 4}), // Adjust based on your sprite
+      runAnim({{0, PLAYER_SIZE, PLAYER_SIZE, PLAYER_SIZE}, 6}),              // Next row
+      jumpAnim({{0, PLAYER_SIZE * 2, PLAYER_SIZE, PLAYER_SIZE}, 11}),             // Jump frames
+      attackAnim({{0, PLAYER_SIZE * 3, PLAYER_SIZE, PLAYER_SIZE}, 4})           // Attack frames (wider)
 {
   currentAnim = &idleAnim;
 }

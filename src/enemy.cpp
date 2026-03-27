@@ -2,7 +2,7 @@
 
 Enemy::Enemy(float x, float y, float patrolDist = 100)
     : position({x, y}), startPos({x, y}), patrolDistance(patrolDist), speed(50),
-      width(32), height(48), alive(true), health(2) {}
+      width(80), height(80), alive(true), health(2) {}
 
 void Enemy::Update(float deltaTime, Player &player) {
   if (!alive)

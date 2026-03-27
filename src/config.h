@@ -2,6 +2,7 @@
 
 inline constexpr int SCREEN_WIDTH = 1280;
 inline constexpr int SCREEN_HEIGHT = 720;
+inline constexpr int PLAYER_SIZE = 170;
 inline constexpr float GRAVITY = 800.0f;
 inline constexpr float JUMP_FORCE = -400.0f;
 inline constexpr float PLAYER_SPEED = 200.0f;

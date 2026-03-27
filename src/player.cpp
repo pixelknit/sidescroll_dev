@@ -9,7 +9,7 @@ Player::Player(Texture2D &spriteSheet)
       facingRight(true), isGrounded(false), canAttack(true), attackTimer(0),
       state(IDLE), idleAnim({{0, 0, size_chr, size_chr}, 4}), // Adjust based on your sprite
       runAnim({{0, size_chr, size_chr, size_chr}, 6}),              // Next row
-      jumpAnim({{0, size_follow, size_chr, size_chr}, 2}),             // Jump frames
+      jumpAnim({{0, size_follow, size_chr, size_chr}, 11}),             // Jump frames
       attackAnim({{0, size_follow + size_chr, size_chr, size_chr}, 4})           // Attack frames (wider)
 {
   currentAnim = &idleAnim;

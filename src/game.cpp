@@ -5,18 +5,18 @@ Game::Game() : player(characterSheet), score(0), keys(0), state(PLAYING) {
   SetTargetFPS(60);
 
   // Load textures (adjust paths to your PNG files)
-  characterSheet = LoadTexture("character_sprite.png");
-  environmentSheet = LoadTexture("environment_sprite.png");
+  characterSheet = LoadTexture("assets/character_sprite.png");
+  environmentSheet = LoadTexture("assets/environment_sprite.png");
 
   bgLayers = {
-      {LoadTexture("bg_05.png"), 0.1f, 0}, {LoadTexture("bg_04.png"), 0.3f, 0},
-      {LoadTexture("bg_03.png"), 0.6f, 0}, {LoadTexture("bg_02.png"), 0.7f, 0},
-      {LoadTexture("bg_01.png"), 0.8f, 0},
+      {LoadTexture("assets/bg_05.png"), 0.1f, 0}, {LoadTexture("assets/bg_04.png"), 0.3f, 0},
+      {LoadTexture("assets/bg_03.png"), 0.6f, 0}, {LoadTexture("assets/bg_02.png"), 0.7f, 0},
+      {LoadTexture("assets/bg_01.png"), 0.8f, 0},
   };
 
   // Setup camera
   camera.target = {0, 0};
-  camera.offset = {SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f};
+  camera.offset = {SCREEN_WIDTH / 3.0f, SCREEN_HEIGHT / 3.0f};
   camera.rotation = 0.0f;
   camera.zoom = 2.0f; // Zoom in for pixel art look
 

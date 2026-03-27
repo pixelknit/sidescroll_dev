@@ -3,6 +3,7 @@
 
 game
 
+*.DS_Store
 build/
 
 # Compiled Object files

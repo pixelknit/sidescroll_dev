@@ -13,7 +13,8 @@ struct Collectible {
   bool collected;
   Animation anim;
 
-  Collectible(Vector2 pos, Texture2D sheet);
+  //Collectible(Vector2 pos, Texture2D sheet);
+  Collectible(Vector2 pos);
   void Update(float deltaTime);
   void Draw(Texture2D &spriteSheet);
   bool CheckCollision(const Rectangle &player);

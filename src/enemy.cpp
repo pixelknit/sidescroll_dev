@@ -1,4 +1,5 @@
 #include "enemy.hpp"
+#include "config.h"
 
 Enemy::Enemy(float x, float y, float patrolDist = 100)
     : position({x, y}), startPos({x, y}), patrolDistance(patrolDist), speed(50),
@@ -36,7 +37,7 @@ void Enemy::Draw(Texture2D &spriteSheet) {
     return;
 
   // Use enemy frames from character sheet or separate enemy sprite
-  Rectangle source = {0, 192, 32, 48}; // Adjust based on your sprite
+  Rectangle source = {0, PLAYER_SIZE * 4, PLAYER_SIZE, PLAYER_SIZE}; // Adjust based on your sprite
   Rectangle dest = {position.x, position.y, width, height};
   DrawTexturePro(spriteSheet, source, dest, {0, 0}, 0, WHITE);
 }

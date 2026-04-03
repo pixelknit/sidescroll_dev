@@ -5,6 +5,7 @@ game
 
 *.DS_Store
 build/
+.vs/
 
 # Compiled Object files
 *.slo

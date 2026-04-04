@@ -1,15 +1,13 @@
 #include "player.hpp"
 #include "config.h"
 
-
 Player::Player(Texture2D &spriteSheet)
     : position({100, 300}), velocity({0, 0}), width(80), height(80),
       facingRight(true), isGrounded(false), canAttack(true), attackTimer(0),
-      state(IDLE), idleAnim({{0, 0, PLAYER_SIZE, PLAYER_SIZE}, 4}), // Adjust based on your sprite
-      runAnim({{0, PLAYER_SIZE, PLAYER_SIZE, PLAYER_SIZE}, 6}),              // Next row
-      jumpAnim({{0, PLAYER_SIZE * 2, PLAYER_SIZE, PLAYER_SIZE}, 11}),             // Jump frames
-      attackAnim({{0, PLAYER_SIZE * 3, PLAYER_SIZE, PLAYER_SIZE}, 4})           // Attack frames (wider)
-{
+      state(IDLE), idleAnim({{0, 0, PLAYER_SIZE, PLAYER_SIZE}, 4}),
+      runAnim({{0, PLAYER_SIZE, PLAYER_SIZE, PLAYER_SIZE}, 6}),
+      jumpAnim({{0, PLAYER_SIZE * 2, PLAYER_SIZE, PLAYER_SIZE}, 11}),
+      attackAnim({{0, PLAYER_SIZE * 3, PLAYER_SIZE, PLAYER_SIZE}, 4}) {
   currentAnim = &idleAnim;
 }
 
@@ -45,40 +43,51 @@ void Player::Update(float deltaTime, const std::vector<Rectangle> &platforms) {
     attackTimer = 0.4f; // Attack duration
   }
 
-  // Apply gravity
-  velocity.y += GRAVITY * deltaTime;
+  if (!IsKeyDown(KEY_W) && !IsKeyDown(KEY_A) && !IsKeyDown(KEY_D) &&
+      !IsKeyDown(KEY_J) && !IsKeyDown(KEY_SPACE)) {
+    state = IDLE;
+  }
 
-  // Update position
+  if (!isGrounded) {
+    velocity.y += GRAVITY * deltaTime;
+  }
+
+  // Store previous position for collision resolution
+  Vector2 prevPos = position;
+
+  // Update X position first (separate axis movement)
   position.x += velocity.x * deltaTime;
+
+  // Check X collisions with platforms
+  Rectangle playerRectX = {position.x, prevPos.y, width, height};
+  for (const auto &plat : platforms) {
+    if (CheckCollisionRecs(playerRectX, plat)) {
+      if (velocity.x > 0)
+        position.x = plat.x - width;
+      else if (velocity.x < 0)
+        position.x = plat.x + plat.width;
+      velocity.x = 0;
+    }
+  }
+
+  // Update Y position
   position.y += velocity.y * deltaTime;
-
-  // Platform collision
   isGrounded = false;
-  Rectangle playerRect = GetBounds();
 
-  for (const auto &platform : platforms) {
-    if (CheckCollisionRecs(playerRect, platform)) {
+  // Check Y collisions
+  Rectangle playerRectY = {position.x, position.y, width, height};
+  for (const auto &plat : platforms) {
+    if (CheckCollisionRecs(playerRectY, plat)) {
       // Landing on top
-      if (velocity.y > 0 &&
-          playerRect.y + playerRect.height - velocity.y * deltaTime <=
-              platform.y) {
-        position.y = platform.y - height;
+      if (velocity.y > 0 && prevPos.y + height <= plat.y + 5) { // +5 tolerance
+        position.y = plat.y - height;
         velocity.y = 0;
         isGrounded = true;
-        if (state == JUMPING)
-          state = IDLE;
       }
       // Hitting head
-      else if (velocity.y < 0 && playerRect.y - velocity.y * deltaTime >=
-                                     platform.y + platform.height) {
-        position.y = platform.y + platform.height;
+      else if (velocity.y < 0 && prevPos.y >= plat.y + plat.height - 5) {
+        position.y = plat.y + plat.height;
         velocity.y = 0;
-      }
-      // Side collisions
-      else if (velocity.x > 0) {
-        position.x = platform.x - width;
-      } else if (velocity.x < 0) {
-        position.x = platform.x + platform.width;
       }
     }
   }
@@ -132,7 +141,7 @@ void Player::Draw(Texture2D &spriteSheet) {
 
   DrawTexturePro(spriteSheet, source, dest, origin, 0.0f, WHITE);
 
-  // Debug hitbox (remove in final)
+  // Debug hitbox
   // DrawRectangleLines(position.x, position.y, width, height, RED);
 }
 

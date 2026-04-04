@@ -34,12 +34,12 @@ void Game::CreateLevel() {
   platforms.push_back({2400, 350, 500, 120});
 
   // Floating platforms
-  platforms.push_back({300, 450, 100, 20});
+  platforms.push_back({300, 550, 100, 20});
   platforms.push_back({500, 350, 100, 20});
   platforms.push_back({700, 250, 100, 20});
 
   // Collectibles
-  coins.emplace_back(Vector2{350, 400});
+  coins.emplace_back(Vector2{350, 450});
   coins.emplace_back(Vector2{550, 300});
   coins.emplace_back(Vector2{750, 200});
   coins.emplace_back(Vector2{1000, 500});

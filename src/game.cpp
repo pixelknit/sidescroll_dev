@@ -39,7 +39,7 @@ void Game::CreateLevel() {
   platforms.push_back({700, 250, 100, 20});
 
   // Collectibles
-  coins.emplace_back(Vector2{350, 450});
+  coins.emplace_back(Vector2{350, 470});
   coins.emplace_back(Vector2{550, 300});
   coins.emplace_back(Vector2{750, 200});
   coins.emplace_back(Vector2{1000, 500});
@@ -50,8 +50,8 @@ void Game::CreateLevel() {
   doors.emplace_back(2800.0f, 286.0f, 1); // Needs 1 key
 
   // Enemies
-  enemies.emplace_back(Enemy{1000, 502, 150});
-  enemies.emplace_back(Enemy{1600, 452, 100});
+  enemies.emplace_back(Enemy{1000, 475, 150});
+  enemies.emplace_back(Enemy{1600, 422, 100});
 
   // Key pickup
   coins.emplace_back(Vector2{2200, 350}); // This will be a key visually

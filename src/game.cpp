@@ -127,10 +127,10 @@ void Game::Draw() {
   // Draw platforms from environment sprite
   for (const auto &plat : platforms) {
     // Tile the platform texture
-    Rectangle source = {0, 64, 32, 32}; // Ground tile in env sprite
-    for (float x = plat.x; x < plat.x + plat.width; x += 32) {
-      for (float y = plat.y; y < plat.y + plat.height; y += 32) {
-        DrawTexturePro(environmentSheet, source, {x, y, 32, 32}, {0, 0}, 0,
+    Rectangle source = {0, 64, GROUND_TILE_SIZE, GROUND_TILE_SIZE}; // Ground tile in env sprite
+    for (float x = plat.x; x < plat.x + plat.width; x += GROUND_TILE_SIZE) {
+      for (float y = plat.y; y < plat.y + plat.height; y += GROUND_TILE_SIZE) {
+        DrawTexturePro(environmentSheet, source, {x, y, GROUND_TILE_SIZE, GROUND_TILE_SIZE}, {0, 0}, 0,
                        WHITE);
       }
     }

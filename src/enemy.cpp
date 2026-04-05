@@ -3,13 +3,15 @@
 
 Enemy::Enemy(float x, float y, float patrolDist = 100)
     : position({x, y}), startPos({x, y}), patrolDistance(patrolDist), speed(50),
-      width(80), height(80), alive(true), health(2) {}
+      width(80), height(80), alive(true), health(2),
+      anim{{0, PLAYER_SIZE * 4, PLAYER_SIZE, PLAYER_SIZE}, 8} {}
 
 void Enemy::Update(float deltaTime, Player &player) {
   if (!alive)
     return;
 
   // Simple patrol AI
+  anim.Update(deltaTime);
   float offset = sin(GetTime() * speed * 0.01) * patrolDistance;
   position.x = startPos.x + offset;
 
@@ -36,8 +38,7 @@ void Enemy::Draw(Texture2D &spriteSheet) {
   if (!alive)
     return;
 
-  // Use enemy frames from character sheet or separate enemy sprite
-  Rectangle source = {0, PLAYER_SIZE * 4, PLAYER_SIZE, PLAYER_SIZE}; // Adjust based on your sprite
+  Rectangle source = anim.GetCurrentFrame();
   Rectangle dest = {position.x, position.y, width, height};
   DrawTexturePro(spriteSheet, source, dest, {0, 0}, 0, WHITE);
 }

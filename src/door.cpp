@@ -4,7 +4,7 @@ Door::Door(float x, float y, int keysNeeded = 0)
     : position({x, y}), width(48), height(64), isOpen(false),
       isLocked(keysNeeded > 0), requiredKeys(keysNeeded) {}
 
-void Door::Update(Player &player, int playerKeys) {
+void Door::Update(Player &player, int playerKeys, Door &destDoor) {
   Rectangle doorRect = {position.x, position.y, width, height};
   Rectangle playerRect = player.GetBounds();
 
@@ -12,13 +12,16 @@ void Door::Update(Player &player, int playerKeys) {
     if (!isLocked || playerKeys >= requiredKeys) {
       if (IsKeyPressed(KEY_E)) {
         isOpen = true;
+        if (isOpen){
+        Vector2 destDoorPosition = destDoor.position;
+        player.position = destDoorPosition;
+        }
       }
     }
   }
 }
 
 void Door::Draw(Texture2D &envSheet) {
-  // Door frames in environment sprite (adjust coordinates)
   Rectangle source;
   if (isOpen) {
     source = {96, 0, 48, 64}; // Open door frame

@@ -13,6 +13,6 @@ struct Door {
   int requiredKeys;
 
   Door(float x, float y, int keysNeeded);
-  void Update(Player &player, int playerKeys);
+  void Update(Player &player, int playerKeys, Door &destDoor);
   void Draw(Texture2D &envSheet);
 };

@@ -2,7 +2,7 @@
 
 Collectible::Collectible(Vector2 pos)
     : position(pos), radius(12), collected(false), anim({{0, 200, 16, 16}, 8}) {
-} // Adjust frame in your sprite
+} 
 
 void Collectible::Update(float deltaTime) {
   if (!collected)

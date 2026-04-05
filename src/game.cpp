@@ -1,26 +1,27 @@
 #include "game.hpp"
+#include "config.h"
 
 Game::Game() : player(characterSheet), score(0), keys(0), state(PLAYING) {
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Side Scroller - Raylib");
   SetTargetFPS(60);
 
-  // Load textures (adjust paths to your PNG files)
   characterSheet = LoadTexture("assets/character_sprite.png");
   environmentSheet = LoadTexture("assets/environment_sprite.png");
 
   bgLayers = {
-      {LoadTexture("assets/bg_05.png"), 0.1f, 0}, {LoadTexture("assets/bg_04.png"), 0.3f, 0},
-      {LoadTexture("assets/bg_03.png"), 0.6f, 0}, {LoadTexture("assets/bg_02.png"), 0.7f, 0},
-      {LoadTexture("assets/bg_01.png"), 0.8f, 0},
+      {LoadTexture("assets/bg_05.png"), BG_LAYER_PARALLAX_MOTION_SPEED[0], 0},
+      {LoadTexture("assets/bg_04.png"), BG_LAYER_PARALLAX_MOTION_SPEED[1], 0},
+      {LoadTexture("assets/bg_03.png"), BG_LAYER_PARALLAX_MOTION_SPEED[2], 0},
+      {LoadTexture("assets/bg_02.png"), BG_LAYER_PARALLAX_MOTION_SPEED[3], 0},
+      {LoadTexture("assets/bg_01.png"), BG_LAYER_PARALLAX_MOTION_SPEED[4], 0},
   };
 
   // Setup camera
   camera.target = {0, 0};
   camera.offset = {SCREEN_WIDTH / 3.0f, SCREEN_HEIGHT / 3.0f};
   camera.rotation = 0.0f;
-  camera.zoom = 2.0f; // Zoom in for pixel art look
+  camera.zoom = 2.0f;
 
-  // Create level
   CreateLevel();
 }
 
@@ -34,27 +35,28 @@ void Game::CreateLevel() {
   platforms.push_back({2400, 350, 500, 120});
 
   // Floating platforms
-  platforms.push_back({300, 550, 100, 20});
-  platforms.push_back({500, 350, 100, 20});
-  platforms.push_back({700, 250, 100, 20});
+  platforms.push_back({300, 450, 100, 20});
+  platforms.push_back({500, 360, 100, 20});
+  platforms.push_back({700, 270, 100, 20});
 
   // Collectibles
-  coins.emplace_back(Vector2{350, 470});
-  coins.emplace_back(Vector2{550, 300});
-  coins.emplace_back(Vector2{750, 200});
+  coins.emplace_back(Vector2{370, 410});
+  coins.emplace_back(Vector2{550, 320});
+  coins.emplace_back(Vector2{750, 220});
   coins.emplace_back(Vector2{1000, 500});
   coins.emplace_back(Vector2{1500, 450});
 
   // Doors
   doors.emplace_back(750.0f, 536.0f, 0);  // No key needed
   doors.emplace_back(2800.0f, 286.0f, 1); // Needs 1 key
+  doors.emplace_back(310.0f, 355.0f, 0);  // Door to travel to
 
   // Enemies
   enemies.emplace_back(Enemy{1000, 475, 150});
   enemies.emplace_back(Enemy{1600, 422, 100});
 
   // Key pickup
-  coins.emplace_back(Vector2{2200, 350}); // This will be a key visually
+  coins.emplace_back(Vector2{2200, 350});
 }
 
 void Game::Update(float deltaTime) {
@@ -85,7 +87,7 @@ void Game::Update(float deltaTime) {
 
   // Update doors
   for (auto &door : doors) {
-    door.Update(player, keys);
+    door.Update(player, keys, doors[2]);
   }
 
   // Update enemies
@@ -94,11 +96,9 @@ void Game::Update(float deltaTime) {
   }
 
   // Win condition (reach end door)
-  if (doors.size() > 1 && doors[1].isOpen &&
-      CheckCollisionRecs(player.GetBounds(),
-                         {doors[1].position.x, doors[1].position.y,
-                          doors[1].width, doors[1].height})) {
+  if (doors.size() > 1 && doors[1].isOpen) {
     // Level complete!
+    state = GAME_OVER;
   }
 
   // Pause

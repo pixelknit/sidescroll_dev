@@ -15,6 +15,9 @@ int main() {
   Game game;
 
   while (!game.ShouldClose()) {
+    if (game.state == GAME_OVER)
+      return 0;
+
     float deltaTime = GetFrameTime();
 
     game.HandleInput();

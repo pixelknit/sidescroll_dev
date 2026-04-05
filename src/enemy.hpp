@@ -15,6 +15,7 @@ struct Enemy {
   float width, height;
   bool alive;
   int health;
+  Animation anim;
 
   Enemy(float x, float y, float patrolDist);
 

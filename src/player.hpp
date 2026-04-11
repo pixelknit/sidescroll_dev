@@ -9,11 +9,13 @@
 struct Player {
   Vector2 position;
   Vector2 velocity;
+  int health;
   float width, height;
+  float attackTimer;
   bool facingRight;
   bool isGrounded;
   bool canAttack;
-  float attackTimer;
+  bool alive;
 
   PlayerState state;
   Animation *currentAnim;

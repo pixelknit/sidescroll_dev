@@ -31,6 +31,7 @@ void Enemy::Update(float deltaTime, Player &player) {
     } else {
       player.position.x += 50;
     }
+    player.health -= 10;
   }
 }
 

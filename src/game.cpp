@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "config.h"
+#include <iostream>
 
 Game::Game() : player(characterSheet), score(0), keys(0), state(PLAYING) {
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Side Scroller - Raylib");
@@ -60,6 +61,11 @@ void Game::CreateLevel() {
 }
 
 void Game::Update(float deltaTime) {
+  if (!player.alive){
+    std::cout << "YOU HAVE DIED!\n";
+    state = GAME_OVER;
+  }
+
   if (state != PLAYING)
     return;
 
@@ -114,7 +120,6 @@ void Game::Draw() {
   BeginDrawing();
   ClearBackground(SKYBLUE);
 
-  // Draw background (parallax could be added here)
   for (auto &layer : bgLayers) {
     float x = fmod(layer.offsetX, layer.texture.width);
     DrawTexture(layer.texture, x, 0, WHITE);
@@ -127,7 +132,7 @@ void Game::Draw() {
   // Draw platforms from environment sprite
   for (const auto &plat : platforms) {
     // Tile the platform texture
-    Rectangle source = {0, 64, GROUND_TILE_SIZE, GROUND_TILE_SIZE}; // Ground tile in env sprite
+    Rectangle source = {0, 64, GROUND_TILE_SIZE, GROUND_TILE_SIZE}; 
     for (float x = plat.x; x < plat.x + plat.width; x += GROUND_TILE_SIZE) {
       for (float y = plat.y; y < plat.y + plat.height; y += GROUND_TILE_SIZE) {
         DrawTexturePro(environmentSheet, source, {x, y, GROUND_TILE_SIZE, GROUND_TILE_SIZE}, {0, 0}, 0,
@@ -152,16 +157,17 @@ void Game::Draw() {
   player.Draw(characterSheet);
 
   // Draw attack hitbox debug (optional)
-  if (player.state == ATTACKING) {
-    Rectangle atk = player.GetAttackHitbox();
-    DrawRectangleRec(atk, ColorAlpha(RED, 0.3));
-  }
+  // if (player.state == ATTACKING) {
+  //   Rectangle atk = player.GetAttackHitbox();
+  //   DrawRectangleRec(atk, ColorAlpha(RED, 0.3));
+  // }
 
   EndMode2D();
 
   // UI
   DrawText(TextFormat("SCORE: %d", score), 20, 20, 20, WHITE);
   DrawText(TextFormat("KEYS: %d", keys), 20, 50, 20, YELLOW);
+  DrawText(TextFormat("HEALTH: %d", player.health), 20, 70, 20, WHITE);
 
   if (state == PAUSED) {
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ColorAlpha(BLACK, 0.5));

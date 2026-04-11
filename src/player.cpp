@@ -3,7 +3,8 @@
 
 Player::Player(Texture2D &spriteSheet)
     : position({100, 300}), velocity({0, 0}), width(80), height(80),
-      facingRight(true), isGrounded(false), canAttack(true), attackTimer(0),
+      facingRight(true), isGrounded(false), alive(true), health(100),
+      canAttack(true), attackTimer(0),
       state(IDLE), idleAnim({{0, 0, PLAYER_SIZE, PLAYER_SIZE}, 4}),
       runAnim({{0, PLAYER_SIZE, PLAYER_SIZE, PLAYER_SIZE}, 6}),
       jumpAnim({{0, PLAYER_SIZE * 2, PLAYER_SIZE, PLAYER_SIZE}, 11}),
@@ -14,6 +15,10 @@ Player::Player(Texture2D &spriteSheet)
 void Player::Update(float deltaTime, const std::vector<Rectangle> &platforms) {
   // Input handling
   velocity.x = 0;
+
+  if (health <= 0){
+    alive = false;
+  }
 
   if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) {
     velocity.x = -PLAYER_SPEED;

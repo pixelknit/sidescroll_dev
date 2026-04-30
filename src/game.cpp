@@ -17,6 +17,10 @@ Game::Game() : player(characterSheet), score(0), keys(0), state(PLAYING) {
       {LoadTexture("assets/bg_01.png"), BG_LAYER_PARALLAX_MOTION_SPEED[4], 0},
   };
 
+  fgLayers = {
+      {LoadTexture("assets/front_01.png"), 2.5f, 0},
+  };
+
   // Setup camera
   camera.target = {0, 0};
   camera.offset = {SCREEN_WIDTH / 3.0f, SCREEN_HEIGHT / 3.0f};
@@ -114,6 +118,9 @@ void Game::Update(float deltaTime) {
   for (auto &layer : bgLayers) {
     layer.offsetX = -player.position.x * layer.speed;
   }
+  for (auto &layer : fgLayers) {
+    layer.offsetX = -player.position.x * layer.speed;
+  }
 }
 
 void Game::Draw() {
@@ -164,6 +171,14 @@ void Game::Draw() {
 
   EndMode2D();
 
+  for (auto &layer : fgLayers) {
+    float x = fmod(layer.offsetX, layer.texture.width);
+    // Anchor bottom of foreground to world ground level so it stays down when player jumps - test
+    int y = (int)((720.0f - camera.target.y) * camera.zoom + camera.offset.y) - layer.texture.height;
+    DrawTexture(layer.texture, (int)x, y, WHITE);
+    DrawTexture(layer.texture, (int)(x + layer.texture.width), y, WHITE);
+  }
+
   // UI
   DrawText(TextFormat("SCORE: %d", score), 20, 20, 20, WHITE);
   DrawText(TextFormat("KEYS: %d", keys), 20, 50, 20, YELLOW);
@@ -193,6 +208,8 @@ Game::~Game() {
   UnloadTexture(characterSheet);
   UnloadTexture(environmentSheet);
   for (auto &layer : bgLayers)
+    UnloadTexture(layer.texture);
+  for (auto &layer : fgLayers)
     UnloadTexture(layer.texture);
   CloseWindow();
 }

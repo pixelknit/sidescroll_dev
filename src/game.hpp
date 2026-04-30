@@ -25,6 +25,7 @@ struct Game {
   GameState state;
 
   std::vector<ParallaxLayer> bgLayers;
+  std::vector<ParallaxLayer> fgLayers;
 
   Game();
 
